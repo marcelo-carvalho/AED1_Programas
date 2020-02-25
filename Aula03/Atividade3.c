@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <math.h>
+
+int main(){
+    float numero = 0;
+    
+    printf("informe um valor maior que zero: ");
+    scanf("%f", &numero);
+
+    //numero digitado ao quadrado
+    printf("O numero %f ao quadrado: %f \n", numero, pow(numero,2));
+
+    //numero digitado ao cubo
+    printf("O numero %f ao cubo: %f \n", numero, pow(numero,3));
+
+    //a raiz quadrada do numero digitado
+    printf("A raiz quadrada do numero: %f \n", sqrt(numero));
+
+    //a raiz cubica do numero digitadao
+    printf("A raiz cubica do numero: %f \n", pow(numero,1.0/3));
+
+    return 0;
+}
