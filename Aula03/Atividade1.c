@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 int main(){
+    //inicializado as variáveis 
     float b = 0;
     float h = 0;
     float area_triangulo = 0;
