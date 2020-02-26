@@ -12,4 +12,5 @@ int main(){
     printf("A soma de a e b = %f", a+b);
 
     return 0;
+    
 }
