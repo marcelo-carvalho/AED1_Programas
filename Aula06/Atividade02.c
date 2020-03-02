@@ -22,4 +22,5 @@ int main(){
     /* if(primeiro_numero == segundo_numero){
         printf("Os dois numeros sao iguais");
     }*/
+    return 0;
 }

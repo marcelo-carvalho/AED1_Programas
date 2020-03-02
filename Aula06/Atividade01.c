@@ -19,4 +19,5 @@ int main(){
     if(nota < 60) {
         printf("Aluno Reprovado em %s.", nome);
     }
+    return 0;
 }

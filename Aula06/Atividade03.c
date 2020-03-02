@@ -25,4 +25,5 @@ int main(){
     if(numero < 0) {
         printf(" negativo.");
     }
+    return 0;
 }
