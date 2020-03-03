@@ -18,7 +18,7 @@ int main(){
     //Calculo da área do triângulo
     area_triangulo = (b * h)/2;
 
-    printf("A area do triangulo e igual a %f\n", area_triangulo);
+    printf("A area do triangulo e igual a %0.2f\n", area_triangulo);
     
     return 0;
 }

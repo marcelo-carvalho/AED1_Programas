@@ -13,7 +13,7 @@ int main(){
     //Calculo da area do circulo
     area_circulo = PI * pow(r,2);
 
-    printf("A area do circulo eh: %f", area_circulo);
+    printf("A area do circulo eh: %0.2f", area_circulo);
 
     return 0;
 }
