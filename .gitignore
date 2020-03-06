@@ -13,5 +13,6 @@
 *.pif
 *.vb
 *.wsf
+*.docx
 
 # End of https://www.gitignore.io/api/executable
