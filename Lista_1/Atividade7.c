@@ -5,7 +5,7 @@
    Lista de Exercíciso 1 - Atividade 7                          */
 
 
-#include <stdio.h>;
+#include <stdio.h>
 
 int main(){
     

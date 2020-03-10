@@ -5,6 +5,7 @@
    Lista de Exercíciso 1 - Atividade 10                          */
 
 #include <stdio.h>
+#include <math.h>
 
 int main(){
 
