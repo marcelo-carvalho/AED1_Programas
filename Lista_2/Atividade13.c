@@ -2,7 +2,7 @@
 Engenharia de Computação
 Algoritmos e Estrutura de Dados 1 
 Aluno: Marcelo de Carvalho Pereira       Matricula: 687921
-Lista de Exercíciso 2 - Atividade 10                          */
+Lista de Exercíciso 2 - Atividade 13                          */
 
 #include <stdio.h>
 #include <stdlib.h>
