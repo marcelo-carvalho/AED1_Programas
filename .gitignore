@@ -14,5 +14,7 @@
 *.vb
 *.wsf
 *.docx
+*.pdf
+*.zip
 
 # End of https://www.gitignore.io/api/executable

@@ -68,6 +68,6 @@ int main(){
                 printf("\nCaractere invalido.");
         }
     }
-
+    
     return 0;
 }
