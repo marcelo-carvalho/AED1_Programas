@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-//Needed to generate radon numbers.
+//Needed to generate random numbers.
 #include <conio.h>
 
 
@@ -14,8 +14,9 @@ int main(){
     float sum = 0;
     float avg = 0;
 
+    srand(time(NULL));
        for(int i=0; i < 100; i++){
-            sum += (rand() % 101); ///Generates radon nuber between 0-100.
+            sum += (rand() % 101); ///Generates random number between 0-100.
         }
     avg = sum / 100; //Calculates the average.
     printf("The average is: %f", avg);

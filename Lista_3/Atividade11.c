@@ -12,7 +12,8 @@ int main(){
     int n = 0;
 
     while(stop != 0){
-        if(n % 3 == 2){
+        printf("Checking n = %d \n", n);
+        if(n % 3 == 2){ 
             if(n % 5 == 3){
                 if(n % 7 == 4){
                    printf("N = %d", n);
