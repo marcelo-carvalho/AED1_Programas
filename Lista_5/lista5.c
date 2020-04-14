@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <time.h>
 
 //Protótipos das funções das atividades 1 - 7.
 float retornMiddle(float, float, float);
@@ -106,7 +107,7 @@ int main(){
 
         }
     }while(index != 0);
-
+    return 0;
 }
 
 //********************************************************************************************//
@@ -202,9 +203,11 @@ float calcSin(float x){
 //utiliza os valores de entrada como intervalos para os números aleatorios gerados. 
 int randNumber(int min, int max){
     int ran = 0;
+    srand( (unsigned)time(NULL) );
+   
     do{
-        ran = rand() % max;
-    } while(ran <= min && ran >= max);
+        ran = min + (rand() % max);
+    } while(ran < min || ran > max);
 
     return ran;
 }
@@ -530,7 +533,9 @@ int menu(){
     }while(index != 0);
 }
 
-//calcFact: Enters a number and the function returns its factorial
+//calcFact: Função rece um valor inteiro e retorna o seu fatorial, 
+//caso valor inteiro de entrada seja negativo retorna 1 como respostas, caso
+//o valor de entrada seja zero retorna 1 de entrada. 
 float calcFact(int a){
     float fact = 1;
     if(a < 0){
