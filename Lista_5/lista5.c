@@ -6,7 +6,7 @@
 //Protótipos das funções das atividades 1 - 7.
 float retornMiddle(float, float, float);
 float calcAvg();
-int funcXor(int a, int b);
+int funcXor(int, int);
 void calcSeries();
 float calcSeries2();
 float calcSin(float x);
@@ -19,17 +19,22 @@ void nameDozens(int);
 void nameUnits(int);
 void splitNumber(long long int, int);
 
-
 //Protótipos de funções extras
 int menu();
 float calcFact(int a);
+int testaBooleans(int);
+
+
+//********************************************************************************************//
+//*                                        Função main                                       *//
+//********************************************************************************************//
 
 int main(){
     int index = 0;
     float num1 = 0, num2 = 0, num3 = 0; 
     int min, max;
     float avg = 0, x = 0;
-    bool a = 5, b = 5;
+    int a = 0, b = 0;
     long long int parteIneira = 0;
     int parteDecimal = 0;  
 
@@ -40,42 +45,45 @@ int main(){
             case 1: 
                 puts("Informe tres numeros: ");
                 puts("Numero 1: ");
-                scanf("%d", &num1);
+                scanf("%f", &num1);
                 puts("Numero 2: ");
-                scanf("%d", &num2);
+                scanf("%f", &num2);
                 puts("Numero 3: ");
-                scanf("%d", &num3);
-                printf("O valor do meio e: %f", retornMiddle(num1, num2, num3));
+                scanf("%f", &num3);
+                float resp = retornMiddle(num1, num2, num3);
+                printf("O valor do meio e: %0.4f\n", resp);
                 break;
             case 2:
                 avg = calcAvg();
-                printf("A media dos numeros e: %f", avg);
+                printf("A media dos numeros e: %0.4f\n", avg);
                 break;
             case 3: 
                 puts("Informe dois valoers booleans (1 ou 0)\n");
+
                 do{
-                    puts("\nValor de A: ");
+                    puts("Valor de A: ");
                     scanf("%d", &a);
-                }while(a == 1 || a == 0);
-                do{
-                    puts("nValor de B: ");
+                    puts("Valor de B: ");
                     scanf("%d", &b);
-                }while(b == 1 || b == 0);
-                if(funcXor(a, b)==1) puts("A XOR B = Verdadeiro");
-                else puts("A XOR B = Falso");
+                }while(testaBooleans(a) != 1 || testaBooleans(b) != 1);
+                               
+                if(funcXor(a, b)==1) 
+                    puts("A XOR B = Verdadeiro");
+                else 
+                    puts("A XOR B = Falso");
                 break;
             case 4: 
                 calcSeries();
                 break;
             case 5:
                 avg = calcSeries2();
-                printf("\nO resultado do somatorio e: %f", avg);
+                printf("\nO resultado do somatorio e: %f\n", avg);
                 break;
             case 6:
                 puts("Informe um numero real x: ");
                 scanf("%f", &x);
                 printf("\nO valor do sen(x) = %f", calcSin(x));
-                printf("\nO valor de sen(x) pela funcao e MATH.H = %f", sin(x));
+                printf("\nO valor de sen(x) pela funcao e MATH.H = %f\n", sin(x));
                 break;
             case 7:
                 do{
@@ -86,7 +94,7 @@ int main(){
                     printf("\nValor de max:");
                     scanf("%d", &max);
                 }while(min > max);
-                printf("O valor aleatorio eh: %i", randNumber(min, max));
+                printf("O valor aleatorio eh: %i\n", randNumber(min, max));
                 break;
             case 8: 
                 do{
@@ -100,7 +108,6 @@ int main(){
     }while(index != 0);
 
 }
-
 
 //********************************************************************************************//
 //*                            Funções das atividades 1 - 7                                  *//
@@ -120,15 +127,15 @@ float retornMiddle(float num1, float num2, float num3){
 //calcAvg: Função solicita dez valores para o usuário e aguarda que ele informe dez valores,
 //em seguida calcula a media dos valores informados e retorna este valor para a função requerinte.
 float calcAvg(){
-    int avg = 0;
-    int aux = 0;
+    float avg = 0;
+    float aux = 0;
     puts("Informe 1- numeros: ");
     for(int i=0; i< 10; i++){
-        printf("#%d: ", i);
+        printf("#%d: ", i + 1);
         scanf("%f", &aux);
         avg += aux;
     }
-    return avg / 10;
+    return avg /10;
 }
 
 //funcXor: Função pede dois valores inteiros A e B, e retorna para oa função requerinte as saídas de 
@@ -138,9 +145,12 @@ float calcAvg(){
 //0 -> A = 1 B = 1
 //1 -> A = 0 B = 0 
 int funcXor(int a, int b){
-    if (a == 1 && b == 0) return 1;
-    else if (a == 0 && b == 1) return 1;
-    else return 0;
+    if (a == 1 && b == 0)
+        return 1;
+    else if (a == 0 && b == 1) 
+        return 1;
+    else 
+        return 0;
 }
 
 //calcSeries: procedimento criado para calcular os vintes primeiros elementos de uma serie infinita. 
@@ -150,47 +160,51 @@ void calcSeries(){
     int num = 100;
     float series = 0;
     while (count < 20){
-        series += (float) num / calcFact(count);
+        series += num / calcFact(count);
         num--;
         count++;
     }
-    printf("O resultado da serie eh: %f", series);
+    printf("O resultado da serie eh: %f\n", series);
 }
 
-//calcSeries2: fuction to calculate the series result and returns it.
+//calcSeries2: Função para calcular um serie de 15 elementos. A função não recebe argumentos e retorna o 
+//o resultado do somatorio. 
 float calcSeries2(){
     int num = 1; 
     int den = 15;
     float sum = 0;
 
     for(int i = 0; i < 15; i++){
-        sum += (float) num/(den*den); //Adding the new terms.
+        sum += (float) num/(den*den);
         num *= 2;
         den -= 1;
     }
     return sum;
 }
 
-//calcSin: Function asks for a number and returns sin(x)
+//calcSin: Função recebe um valor de entrada e partir deste utiliza um metódo númerico para calcular o seno do 
+//valor de entrada. A função foi dimensionada de forma que o valor de saída seja 4 casas decimais preciso em
+//relação a função sin(x) de math.h.
 float calcSin(float x){
     float comp = sin(x);
     float sinX = x; 
     int operator = 3;
     int i = 1;
-    while(sinX / comp <= 1){
+    while(i < 20){
         sinX += (float) (pow(x,operator) / calcFact(operator)) * pow(-1,i);
-        operator =+ 2;
+        operator += 2;
         i++;
     }
-    return i;
+    return sinX;
 }
 
-//ranNumber: functions recieves two numbers and returns a radon number between both.
+//ranNumber: Função recebe dois valores de entrado um max e min onde um processo para gerar números aleatórios
+//utiliza os valores de entrada como intervalos para os números aleatorios gerados. 
 int randNumber(int min, int max){
     int ran = 0;
     do{
         ran = rand() % max;
-    } while(ran >= min && ran <= max);
+    } while(ran <= min && ran >= max);
 
     return ran;
 }
@@ -531,5 +545,16 @@ float calcFact(int a){
             fact *= i;
         }
         return fact;
+    }
+}
+//testaBooleans: a função testa se os valores atribuidos a A e B estão dentro da regra de 
+//0 ou 1. caso tudo esteja correto a função retorna 1, caso contrário reetorna 0.
+int testaBooleans(int a){
+    if(a == 1 || a == 0){
+        return 1;
+    }
+    else{
+        puts("\nO valor da variavel so pode ser 0 ou 1.\n");
+        return 0;
     }
 }
