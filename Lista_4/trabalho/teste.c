@@ -10,9 +10,7 @@ void nameUnits(int);
 int main(){
     
     long long int parteIneira = 0;
-    int parteDecimal = 0;
-    //bool ValidateNumber_flag = false;
-    
+    int parteDecimal = 0;    
 
     puts("Informe um numero entre 0 e 999.999.999.99,99: ");
     scanf("%lld,%d", &parteIneira, &parteDecimal);
@@ -77,11 +75,11 @@ int main(){
            printf(" centavos");
         }
 
-        printf("\n\tBilhao: %d", billions);
+        /*printf("\n\tBilhao: %d", billions);
         printf("\n\tMilhao: %d", millions);
         printf("\n\tMilhar: %d", thousands);
         printf("\n\tCentena: %d", hundreds);
-        printf("\n\tDecimal: %d", parteDecimal);
+        printf("\n\tDecimal: %d", parteDecimal);*/
     }
 
     return 0;
