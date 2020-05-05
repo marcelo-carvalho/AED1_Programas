@@ -10,7 +10,7 @@ int main(){
     printf("Digite uma string: ");
     scanf("%[^\n]", string);
 
-    //tamanho define o limite de interecação.
+    //tamanho define o limite de iterecação.
     //index define a váriavel a ser decrementada.
     tamanho = strlen(string);
     index = tamanho - 1;

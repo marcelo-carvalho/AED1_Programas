@@ -15,6 +15,8 @@ int main(){
     return 0;
 }
 
+
+//Função realiza ordenação do vetor utilizando o metodo quick sorting. 
 void rapida(int n, int *v){
     if(n<=1)
         return 1;

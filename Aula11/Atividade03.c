@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//Necessárias para gerar números aleatórios. 
-#include <conio.h>
+//Necessaria para gerar números aleatórios. 
 #include <time.h>
 
 int main(){
@@ -29,7 +28,7 @@ int main(){
         if(vetor[i] % 3 == 0)
             multiplos_3++;
         
-        if(vetor[i] % 2 != 0 || vetor[i] != 5)
+        if(vetor[i] % 2 != 0 || vetor[i] % 5 != 0)
             nao_multiplos_2_5++;
     }
 
