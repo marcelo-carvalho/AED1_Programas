@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <locale.h>
 
 #define M 4
+#define N 8
 
 void matrizManual(int mat[][M]);
 void matrizAutomatico(int mat[][M]);
@@ -23,12 +25,34 @@ void transpostaMatriz(int mat1[][M], int mat2[][M]);
 int menu();
 int matrizOpcao();
 
+struct jogada {
+    int x;
+    int y;
+};
+typedef struct jogada Jogada;
+
+void setJogada(int turno);
+void inicializaTabuleiro();
+void adicionaJogada(int i);
+void setTabuleiro(int i);
+int validaJogada(int i);
+void imprimeTabuleiro();
+void tabuleiroIA();
+int setTabuleiroIA(int turno);
+void imprimeLista();
+
+Jogada Lista[N];
+int Tabuleiro[N][N];
+
 int main(){
     int mat[M][M];
     int mat2[M][M];
     int copia[M][M];
     int transposta[M][M];
-    int index, k, cont = 0;; 
+    int index, k, cont = 0;
+    int i = 0;
+
+    setlocale(LC_ALL, "Portuguese");
 
     do{
         index = menu();
@@ -126,7 +150,7 @@ int main(){
                 int somaCol = 0;
                 printf("\nInforme o valor da coluna que se deseja saber a soma dos valores:");
                 scanf("%d", &col);
-                if(col < M){
+                if(col < M && col > 0){
                     somaCol = somaColunaMatriz(mat,col);
                     printf("\nO Valor da soma eh: %d\n", somaCol);
                     imprimeMatriz(mat);
@@ -144,6 +168,23 @@ int main(){
                 imprimeMatriz(mat);
                 puts("Matriz transposta");
                 imprimeMatriz(transposta);
+                break;
+            case 10:
+                inicializaTabuleiro();
+                while(i < N){
+                    setJogada(i);
+                    if(validaJogada(i) == 1){
+                        i++;
+                    }
+                    else{
+                        puts("A jogada não é valida...");
+                        puts("Por favor, tente novamente.");
+                    }
+                }
+                puts("Parabéns!!");
+                puts("Tabuleiro montado com sucesso.");
+                imprimeTabuleiro();
+                imprimeLista();
                 break;
             default:
                 index = 0;
@@ -341,18 +382,6 @@ int maiorAbaixoDigMatriz(int mat[][M]){
     return maior;
 }
 
-//Procedimento para criar a matriz transposta de uma matriz dada.
-//Entradas:
-//          mat1 -> matriz original.
-//          mat2 -> matriz que recebera a transposta de mat1.
-void transpostaMatriz(int mat1[][M], int mat2[][M]){
-    for(int i = 0; i < M; i ++){
-        for(int j = 0; j < M; j++){
-            mat2[j][i] = mat1[i][j];
-        }
-    }
-}
-
 //Função para calcular a soma dos valores de uma dada coluna de uma matriz. 
 //Entrada:
 //          vet -> Matriz a ser analisada.
@@ -369,6 +398,19 @@ int somaColunaMatriz(int mat[][M], int col){
     }
     return soma;
 }
+
+//Procedimento para criar a matriz transposta de uma matriz dada.
+//Entradas:
+//          mat1 -> matriz original.
+//          mat2 -> matriz que recebera a transposta de mat1.
+void transpostaMatriz(int mat1[][M], int mat2[][M]){
+    for(int i = 0; i < M; i ++){
+        for(int j = 0; j < M; j++){
+            mat2[j][i] = mat1[i][j];
+        }
+    }
+}
+
 
 //Função de menu para da forma que matriz sera preenchida.
 //Saída:
@@ -425,4 +467,206 @@ int menu(){
     }while(index != 0);
 
     return index;
+}
+
+//Procedimento responsável por atribuir o valor zero em todos os elementos da matriz. 
+void inicializaTabuleiro(){
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < N; j++){
+            Tabuleiro[i][j] = 0;
+        }
+    }
+}
+
+//Procedimento responsável por inserir o vetor Lista a jogada realizada pelo usuário. 
+//Entrada:
+//          turno -> indice do vetor de jogadas. 
+void setJogada(int turno){
+    int x;
+    int y;
+    int flagValida = -1; 
+
+    printf("Jogada %i", turno+1);
+    printf("\nInforme x: ");
+    scanf("%d", &x);
+
+    do{
+        if(x < 1 || x >= 9){
+            printf("\nValor invalido...");
+            printf("\nInforme um valor valido para x: ");
+            scanf("%d", &x);
+            flagValida = -1;
+        }
+        else{
+            flagValida = 1;
+        }
+    }while(flagValida == -1);
+
+    printf("Informe y: ");
+    scanf("%d", &y);
+
+    do{
+        if(y < 1 || y >= 9){
+            printf("\nValor invalido...");
+            printf("\nInforme um valor valido para y: ");
+            scanf("%d", &y);
+            flagValida = -1;
+        }
+        else{
+            flagValida = 1;
+        }
+    }while(flagValida == -1);
+
+
+    Lista[turno].x = x-1;
+    Lista[turno].y = y-1;
+    setTabuleiro(turno);
+}
+
+//Procedimento para inserior na matriz Tabuleiro a jogada informada pelo usuário.
+//Entrada:
+//          turno -> indice do vetor de jogadas.
+void setTabuleiro(int turno){
+
+    if(Tabuleiro[Lista[turno].x][Lista[turno].y] == 0) //Testa se posição não está ocupada
+        Tabuleiro[Lista[turno].x][Lista[turno].y] = 1; //ocupa posição
+    else{
+        puts("Posição ocuapda.");
+        puts("Informe outra jogada.");
+        void setJogada(int i);
+    }
+
+    imprimeTabuleiro();
+}
+
+//Função para validação da jogada realizada, confere se a posição escolha é uma posição valida no tabuleiro.
+//Entrada: 
+//          turno -> indice do vetor de jogadas.
+//Saída: 
+//          0 -> Posição invalida.
+//          1 -> posição valida. 
+int validaJogada(int turno){
+    int i = Lista[turno].x + 1; 
+    int j = Lista[turno].y;
+    
+    //Norte
+    while(i < N){
+        if(Tabuleiro[i][j] == 1){
+            puts("Falhou no Norte");
+            Tabuleiro[Lista[turno].x][Lista[turno].y] = 0;
+            return 0;
+        }
+        i++;
+    }
+
+    //Sul
+    i = Lista[turno].x - 1;
+    j = Lista[turno].y;
+    while(i >= 0){
+        if(Tabuleiro[i][j] == 1){
+            puts("Falhou no Sul");
+            Tabuleiro[Lista[turno].x][Lista[turno].y] = 0;
+            return 0;
+        }
+        i--;
+    }
+
+    //Leste
+    i = Lista[turno].x;
+    j = Lista[turno].y + 1;
+    while(j < N){
+        if(Tabuleiro[i][j] == 1){
+            puts("Falhou no Leste");
+            Tabuleiro[Lista[turno].x][Lista[turno].y] = 0;
+            return 0;
+        }
+        j++;
+    }
+
+    //Oeste
+    i = Lista[turno].x;
+    j = Lista[turno].y - 1;
+    while(j >= 0){
+        if(Tabuleiro[i][j] == 1){
+            puts("Falhou no Oeste");
+            Tabuleiro[Lista[turno].x][Lista[turno].y] = 0;
+            return 0;
+        }
+        j--;
+    }
+
+    //Nordeste
+    i = Lista[turno].x + 1;
+    j = Lista[turno].y + 1;
+    while(i < N && j < N ){
+        if(Tabuleiro[i][j] == 1){
+            puts("Falhou no Nordeste.");
+            Tabuleiro[Lista[turno].x][Lista[turno].y] = 0;
+            return 0;
+        }
+        i++;
+        j++;
+    }
+
+    //Noroeste
+    i = Lista[turno].x + 1;
+    j = Lista[turno].y - 1;
+    while(i < N && j >= 0 ){
+        if(Tabuleiro[i][j] == 1){
+            puts("Falhou no Noroeste.");
+            Tabuleiro[Lista[turno].x][Lista[turno].y] = 0;
+            return 0;
+        }
+        i++;
+        j--;
+    }
+
+    //Sudeste
+    i = Lista[turno].x - 1;
+    j = Lista[turno].y + 1;
+    while(i >= 0 && j < N ){
+        if(Tabuleiro[i][j] == 1){
+            puts("Falhou no Sudeste.");
+            Tabuleiro[Lista[turno].x][Lista[turno].y] = 0;
+            return 0;
+        }
+        i--;
+        j++;
+    }
+
+    //Sudoeste
+    i = Lista[turno].x - 1;
+    j = Lista[turno].y - 1;
+    while(i >= 0 && j >= 0 ){
+        if(Tabuleiro[i][j] == 1){
+            puts("Falhou no Sudoeste.");
+            Tabuleiro[Lista[turno].x][Lista[turno].y] = 0;
+            return 0;
+        }
+        i--;
+        j--;
+    }
+    return 1;
+}
+
+//Função para imprimir a matriz Tabuleiro na tela
+void imprimeTabuleiro(){
+    printf("\n");
+    for(int i = N-1; i >= 0; i--){
+        for(int j = 0; j < N; j++){
+            printf("|%d|", Tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+//Função para imprimir os valores de X e Y do vetor Lista
+void imprimeLista(){
+    printf("\n");
+    printf("Lista de Jogadas");
+    for(int i =0; i < N; i++){
+        printf("\n x = %d, y = %d", Lista[i].x, Lista[i].y);
+    }
+    printf("\n");
 }
