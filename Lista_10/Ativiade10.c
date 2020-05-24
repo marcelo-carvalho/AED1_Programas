@@ -42,6 +42,7 @@ int main(){
     return 1;
 }
 
+//Procedimento responsável por atribuir o valor zero em todos os elementos da matriz. 
 void inicializaTabuleiro(){
     for(int i = 0; i < M; i++){
         for(int j = 0; j < M; j++){
@@ -50,6 +51,9 @@ void inicializaTabuleiro(){
     }
 }
 
+//Procedimento responsável por inserir o vetor Lista a jogada realizada pelo usuário. 
+//Entrada:
+//          turno -> indice do vetor de jogadas. 
 void setJogada(int turno){
     int x;
     int y;
@@ -92,6 +96,10 @@ void setJogada(int turno){
     setTabuleiro(turno);
 }
 
+
+//Procedimento para inserior na matriz Tabuleiro a jogada informada pelo usuário.
+//Entrada:
+//          turno -> indice do vetor de jogadas.
 void setTabuleiro(int turno){
 
     if(Tabuleiro[Lista[turno].x][Lista[turno].y] == 0)
@@ -105,6 +113,13 @@ void setTabuleiro(int turno){
     imprimeTabuleiro();
 }
 
+
+//Função para validação da jogada realizada, confere se a posição escolha é uma posição valida no tabuleiro.
+//Entrada: 
+//          turno -> indice do vetor de jogadas.
+//Saída: 
+//          0 -> Posição invalida.
+//          1 -> posição valida. 
 int validaJogada(int turno){
     int i = Lista[turno].x + 1; 
     int j = Lista[turno].y;
@@ -209,6 +224,7 @@ int validaJogada(int turno){
     return 1;
 }
 
+//Função para imprimir a matriz Tabuleiro na tela
 void imprimeTabuleiro(){
     printf("\n");
     for(int i = M-1; i >= 0; i--){

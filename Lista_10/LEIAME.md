@@ -107,7 +107,7 @@ As próximas seções são divididas em duas, uma específica para as soluções
 
 Um dos requisitos exigidos para a solução dos exercícios propostos está relacionado a dimensão das matrizes, o requisito informa que devem ser matrizes de dimensões **N x M**, onde os valores de **N x M** poderiam ser definidos pelo usuário ou poderia ser pré-determinados como constantes. Por fins de facilidade e integridade das funções a serem desenvolvidas estabeleceu-se os valores de **N x M** como sendo constantes. Evitando assim a necessidade de criação de algoritmos mais complexos e garantindo que as matrizes trabalhadas sempre serão quadradas.
 
-### **1. Copia de Matrizes**
+### **1. Copiando de Matrizes**
 
 O primeiro problema requisita a construção de um algoritmo capaz de receber como parâmetro de entrada uma matriz e copiar todos os elementos destas para uma segunda matriz, para solucionar este problema o seguinte algoritmo foi criado:
 
@@ -123,7 +123,7 @@ void copiaMatriz(int mat[][M], int cop[][M]){
 
 Optou-se por um procedimento onde ambas as matrizes seriam passadas por referência, a razão para escolha dessa solução se dá pelo fato de ser mais fácil de se manipular ambas as matrizes e não ter necessidade de se criar um algoritmo complexo para retornar valor por valor de uma matriz para a outra. A solução é bastante simples, muito semelhante ao que acontece nos procedimentos de impressão ou de preenchimento, temos dois laços de repetição encadeadas que percorre todos os elementos de ambas as matrizes acesso o valor de uma e imediatamente atribuindo este valor a posição equivalente da segunda matriz. Temos como entrada a matriz _mat_ contendo os valores originais e a matriz _cop_ a qual se destina os valores copiados.
 
-### **2. Comparação de Matrizes**
+### **2. Comparando de Matrizes**
 
 O segundo problema envolve uma solução bastante semelhante, no caso o procedimento criado deverá comparar os elementos de duas matrizes distintas e verificar se as duas matrizes são iguais. Vejamos:
 
@@ -313,7 +313,7 @@ O procedimento consiste em duas matrizes de entrada, onde _mat1_ é a matriz con
 A **Parte II** da lisa de problemas, consiste em apenas um único problema dividido em partes menores. Primeiramente faz necessário uma contextualização do problema. O desafio das 8 rainhas no tabuleiro de xadrez é um problema matemático onde consiste em dispor oito rainhas em um tabuleiro de xadrez de forma que nenhuma rainha possa atacar a outra. Ou seja, nenhuma rainha pode estar na mesma linha coluna ou diagonal da outra.
 o problema pede que uma implementação seja feita de forma que o usuário possa dispor as peças no tabuleiro, e este automaticamente cheque se a posição é válida ou não. Para se chegar a essa implementação o problema foi divido em cinco partes que serão apresentadas a seguir.
 
-### **a. Struc, Vetor de Posições e Jogadas**
+### **a. Struct, Vetor de Posições e Jogadas**
 
 A primeira parte para solução do problema consiste em estabelecer as estruturas para facilitar a solução do problema. Um primeiro requisito é que o problema que as jogadas sejam implementadas por meio de uma _struc_ também conhecida como Registro, a _struc_ consta apenas de duas variáveis **x** onde será armazenada a linha onde a peça será posicionada e **y** representando a coluna. Seguindo com a implementação do requisito temos:
 
@@ -535,7 +535,7 @@ void imprimeLista(){
 }
 ```
 
-## **e. Imprindo Tabuleiro**
+## **e. Imprimindo Tabuleiro**
 
 A última função implementada nada mais do que um procedimento responsável pela impressão do tabuleiro na tela, este procedimento é chamado em vários momentos da partida, para que o usuário possua controle das posições inda disponíveis e também é impresso no final uma vez que o tabuleiro seja montado.
 
