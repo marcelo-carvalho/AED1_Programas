@@ -68,7 +68,6 @@ int criaArquivo(){
 A função acima inicia invocado um tipo _FILE_, este tipo de variável armazena as informações referentes a um arquivo, é utilizada para interagir com as funções da biblioteca padrão que trabalham com arquivos. Normalmente este tipo de variável é trabalhado na sua forma de ponteiro devido a características da implementação de funções na biblioteca padrão, isso será melhor explicado adiante. Um outro aspecto interessante dessa biblioteca é a presença da função _srand(time(NULL))_ essa função é responsável pela variação da semente que produz números aleatórios baseado no tempo atual do computador, ou seja, garante que novos números aleatórios sejam produzidos todas as vezes que a função for chamada.
 Um dos pontos mais importantes nessa implementação é desvio condicional responsável pela abertura do arquivo de coordenada:
 
-
 ```c
 if((fp = fopen("coordenadas.dat", "wb")) == NULL){
     puts("Arquivo não criado")
@@ -213,3 +212,266 @@ float calcDistancia(Coordenada c1, Coordenada c2){
 
 ## **Cadastro de Alunos**
 
+O segundo problema apresentado consiste em implementar um sistema de cadastros de alunos. A implementação exige que certos requisitos sejam aplicados, tais quais como: manipulação de registros, manipulação de vetor de registros, manipulação de arquivos dentro outros. De uma maneira geral o programa deve ser capaz de armazenar internamente uma série de registros de alunos em um certo vetor. A medida em que os cadastros dos alunos começam a serem registrados, estes já devem estar a disposição do usuário para que buscas sejam feitas e também ser possível listar o que já foi incluindo. O sistema também deve ser capaz de armazenar toda a informação carregada em arquivos externos, que futuramente podem ser lidos e utilizados pelo programa novamente.
+
+Assim como na implementação anterior, o primeiro paço na implementação é estabelecer como o registro vai ser construído e quais informações são necessárias que ele armazene. No caso do problema proposto essa construção já foi informada, bastando apenas a implementação desta no código. Vejamos:
+
+```c
+typedef struct aluno {
+    int matricula;
+    char nome[50];
+    int idade;
+    char telefone[30];
+    float renda;
+    int nota;
+} Aluno;
+```
+
+Para facilitar e agilizar o processo de implementação três variáveis globais foram criadas, um vetor de _Alunos_ chamado _List_, um contador global chamado _Cont_ e um sinalizador de modificações chamado _flagSalvar_. O vetor _List_ é inicializado com um tamanho fixo definido por uma constante de forma a manter uma segurança da quantidade de dados que pode ser armazenada na memória, o valor da constante foi escolhido arbitrariamente. O contator _Cont_ é um indicador de posição de _List_ é controlado ao longo do programa para sempre obedecer a condição de ser menor que o valor máximo definido para o vetor. Por fim temos o sinalizador de modificação, que é uma variável criada de forma que o usuário seja lembrado de que os dados carregados não foram salvos em um arquivo podendo ser perdidos.
+
+Para que o sistema tivesse algum contexto dentre suas várias funções, um menu foi elaborado de forma que o usuário tenha uma maneira de interagir com as funções do programa. Oito opções são apresentadas ao usuário, dentre as quais cada uma realiza um função possível, o range de escolhas está limitado pela condição imposta na variável _index_ que só tem a capacidade de vairar entre **1** e **7**, enterrompendo o laço de repetição quando recebe o valor **0**. Vejamos:
+
+```c
+int menu(){
+    int index = 0;
+    puts("\n=====================Cadastro de Alunos=====================\n"
+             "\nEscolha uma das opcoes abaixo: \n");
+    do{
+        puts("1 - Cadastrar.\n"
+             "2 - Listar.\n"
+             "3 - Renda Média.\n"
+             "4 - Maior Nota.\n"
+             "5 - Pesquisar Matrícula.\n"
+             "6 - Salvar.\n"
+             "7 - Abrir.\n"
+             "0 - Sair.");
+
+             scanf("%d", &index);
+
+             if(index >= 0 && index <= 7)
+                return index;
+            else
+                puts("\nValor invalido. Escolha uma das opcoes abaixo:\n");
+    }while(index != 0);
+
+    return index;
+}
+```
+
+### **Cadastrando alunos**
+
+A principal função do programa é a responsável por fazer a leitura das entradas do usuário e armazenar os dados obtidos em uma das posições do vetor _List_. Como será mostrado adiante na implementação, perceba que o fato de termos o vetor _List_ e o contador _Cont_ definidos globalmente, facilitou muito na implementação da rotina além de trazer mais clareza na interpretação do código.
+
+```C
+void addAluno(){
+    if(Cont < N){
+        printf("Número de matrícula: ");
+        scanf("%d%*c", &List[Cont].matricula);
+        printf("Nome do aluno: ");
+        gets(List[Cont].nome);
+        printf("Idade do aluno: ");
+        scanf("%d%*c", &List[Cont].idade);
+        printf("Telefone: ");
+        gets(List[Cont].telefone);
+        printf("Renda: ");
+        scanf("%f%*c", &List[Cont].renda);
+        printf("Nota: ");
+        scanf("%d%*c", &List[Cont].nota);
+    }
+    else{ //Condição para quando vetor esteja cheio.
+        puts("Operação falhou!");
+        puts("Lista está cheia.");
+    }
+    Cont++;
+    puts("Aluno Cadastrado.");
+    FlagSalvar = 1;
+}
+```
+
+Basicamente a função inicia com uma checagem simples, para garantir que o vetor não esteja cheio, em seguida apresenta uma série de informações ao usuário para realização do cadastro. Esta é a única função que tem a habilidade de acrescentar dados ao vetor _List_, portanto é a única função que pode modificar o vetor ao ponto de criar a necessidade de salvar as informações nele contida. Por essa razão o indicador de modificações _FlagSalvar_ é alterado para *1* uma vez que a rotina é executada com sucesso. O contador global _Cont_ também é incrementado quando a rotina é executada corretamente movendo o cursor da lista. O fato de termos todas estas variáveis globais tornou a implementação do programa mais fluida e natural, diminuído a complexidade que se teria ao ter que passar um vetor por referência e ter que lidar com ponteiros.
+
+### **Listando Cadastros**
+
+Uma segunda função do sistema é a capacidade que este tem de listar para o usuário as informações que estão armazenadas no vetor _List_:
+
+```c
+void listaAluno(){
+    int i;
+    if(Cont == 0){
+        puts("Operação falhou.");
+        puts("Lista vázia.");
+        return;
+    }
+
+    for(i = 0; i < Cont; i++){
+        imprimeAluno(List[i]);
+    }
+}
+```
+
+A função inicia checando se o vetor não está vazio, caso o verdadeira a condição, uma mensagem de erro é apresentada ao usuário e o programa retorna ao menu principal. Do contrário um laço de repetição é iniciado, percorrendo todas as posições o vetor _List_ até a posição limitada por _cont_, exibindo as informações contidas em cada uma das posições preenchidas. Esse processo de listagem das informações foi bastante simplificado graças a construção da função _imprimeAluno(Aluno)_, cuja implementação pode ser vista abaixo:
+
+```c
+void imprimeAluno(Aluno aluno){  
+    printf("\n\nMatrícula: %i \tNome: %s", aluno.matricula, aluno.nome);
+    printf("\nIdade: %d \tTelefone: %s", aluno.idade, aluno.telefone);
+    printf("\nRenda: $%.2f \tNota: %d", aluno.renda, aluno.nota);
+}
+```
+
+A função é basicamente uma impressão dos conteúdos de uma variável do tipo _Aluno_ de maneira formatada de forma a se obter um padrão na hora da exibição das informações dos alunos cadastrados toda vez que esta função for necessária.
+
+### **Cálculo de Renda Media**
+
+E sabido que a renda media de um grupo de estudantes é uma métrica importante para se avaliar determinados aspectos desse grupo. Portanto essa função foi integrada ao sistema possibilitando assim o usuário ter acesso a essa informação, segue a implementação:
+
+```C
+void rendaMedia(){
+    float renda = 0;
+    int i;
+
+    if(Cont == 0){
+        puts("Operação falhou.");
+        puts("Lista vázia.");
+        return;
+    }
+
+    for(i = 0; i <Cont; i++){
+        renda += List[i].renda;
+    }
+    renda /= Cont;
+    printf("A renda média é: $ %.2f", renda);
+}
+```
+
+Assim como as funções anteriormente apresentdas, esta também inicia com um desvio condicional avaliando se o vetor possui dados o bastante para execução da operação. Confirmado a disponibilidade dos dados, um laço de repetição é iniciado percorrendo todos os campos preenchidos do vetor _List_ somando o dado de renda contida em cada um deles. Uma vez que já possuimos o conhecimento da quantidade de alunos cadastrados contido na variável _Cont_, o resultado por fim é calculado e apresentado para o usuário finalizando o procedimento.
+
+### **Identificando a maior Nota**
+
+Uma outra métrica interessante de se ter acesso é a maior nota dentro de um grupo de alunos, assim a função foi implementada e integrada ao sistema:
+
+```C
+void maiorNota(){
+    Aluno maior;
+    maior.nota = 0;
+    int i;
+
+    if(Cont == 0){
+        puts("Operação falhou.");
+        puts("Lista vázia.");
+        return;
+    }
+
+    for(i = 0; i < Cont; i ++){
+        if(List[i].nota > maior.nota){
+            maior = List[i];
+        }
+    }
+    imprimeAluno(maior);
+}
+```
+
+A implementação segue o mesmo padrão das anteriores com um desvio condicional para garantir que o vetor contém dados válidos para realizar a operação. Feita a validação, um laço de repetição percorre os elementos válidos comparando as notas de cada aluno até identificar aquele que possui a maior nota. O aluno que tiver a maior nota é armazenado na variável _aluno_ que em seguida é impresso na tela para o usuário.
+
+### **Buscando Aluno**
+
+Uma capacidade importante em implementações com lista é a capacidade de se localizar um determinado registro na lista, essa função também foi implementada no sistema e o dado escolhido para conduzir a busca é o número de matrícula. A implantação da operação foi feita da seguinte forma:
+
+```C
+void buscaAluno(){
+    int mat;
+    int i;
+
+    if(Cont == 0){
+        puts("Operação falhou.");
+        puts("Lista vázia.");
+        return;
+    }
+
+    printf("Número de Matrícula: ");
+    scanf("%d", &mat);
+    for(i = 0; i < Cont; i++){
+        if(List[i].matricula == mat){
+            imprimeAluno(List[i]);
+            return;
+        }
+    }
+
+    puts("Aluno não encontrado.");
+}
+```
+
+Uma vez validado se _List_ possui registros, um laço de repetição percorre os elementos validos de _List_ comparando o campo _matricula_ de cada aluno cadastrado de forma até encontrar um valor que seja igual ao valor informado pelo usuário. Caso o valor seja encontrado o aluno registrado sob aquele valor é apresentado ao usuário na tela, do contrário uma mensagem de "Aluno não encontrado" é apresentada.
+
+### **Salvando Dados**
+
+Um dos requisitos principais do sistema é o de que ele seja capaz de armazenar as informações registradas em um arquivo de texto externo. Logo, uma função de manipulação de arquivos foi implementada de forma a possibilitar esse requisito, vejamos:
+
+```C
+void salvaList(){
+    FILE *fp;
+    int i;
+    char arquivo[50];
+
+    if(Cont == 0){
+        puts("Operação falhou.");
+        puts("Lista vázia.");
+        return;
+    }
+
+    setbuf(stdin, NULL);
+    printf("Nome do arquivo: ");
+    gets(arquivo);
+    strcat(arquivo, ".dat");
+
+    if((fp = fopen(arquivo, "wb+")) == NULL){
+        puts("Arquivo não criado");
+        return;
+    }
+
+    for(i = 0; i < Cont; i++){
+        if(fwrite(&List[i],1,sizeof(Aluno),fp) != sizeof(Aluno)){
+            puts("Um erro ocorreu durante a gravação.");
+            puts("Programa será finalziado.");
+            return;
+        }
+    }
+    fclose(fp);
+
+    puts("Arquivo salvo.");
+    FlagSalvar = 0;
+}
+```
+
+A função foi implementada respeitando o conceito de separação de responsabilidades, ou seja, a função carrega a responsabilidade de abrir um arquivo externo, gerenciar as operações que serão realizadas no arquivo e por sua vez o fecha corretamente garantindo que nenhum dado seja perdido. Podemos ver todos estes elementos na implementação, primeiro garantindo que o vetor contenha dados validos para serem gravados em um arquivo. A rotina aguarda que o usuário informe um nome para o arquivo ser gravado na memória física do computador, em seguida um laço de repetição inicia a gravação dos dados. Repare que a função _fwrite()_ foi utilizada nesse processo, uma vez que o arquivo gravado encontra-se no modo de bytes. Todo registro de aluno gravado pela função _fwrite_ retorna um valor informando o tamanho do bloco de dados, este valor por sua vez é verificado para garantir que todos os dados foram escritos corretamente no arquivo. Em seguida a função _fclose()_ é chamada fechando o arquivo em segurança.
+Escolheu-se o modo binário para a construção do arquivo de forma a garantir uma maior compatibilidade dos dados gravados nos arquivos uma vez que estes forem lidos novamente pelo programa, além de ter um tamanho mais compacto e garantir a confidencialidade dos das informações escritas.
+
+### Lendo um Arquivo de Alunos**
+
+O último requisito exigido é que o sistema seja capaz de ler arquivos informados pelo usuário e desses extrair os dados dos alunos registrados. Vejamos a implementação abaixo:
+
+```c
+void abreList(){
+    FILE *fp;
+    char arquivo[50];
+    Cont = 0;
+
+    setbuf(stdin,NULL);
+    printf("Nome do arquivo: ");
+    gets(arquivo);
+    strcat(arquivo, ".dat");
+
+    if((fp = fopen(arquivo, "rb")) == NULL){
+        puts("Falha ao abrir o arquivo.");
+        return;
+    }
+
+    while(fread(&List[Cont],1,sizeof(Aluno), fp) == sizeof(Aluno) ){
+        Cont++;
+    }
+    puts("Arquivo carregado.");
+}
+```
+
+A implementação também se utiliza do princípio da separação de responsabilidades assumindo as responsabilidades da localização, abertura e manipulação do arquivo. Uma vez que o nome é informado pelo usuário o programa verifica a existência do arquivo, uma vez confirmada ele inicia a leitura dos dados contidos no arquivo e os grava no vetor _List_ incrementando _Cont_ para cada dado adicionado ao vetor.
+Uma vez que os dados forem extraídos do arquivo estarão disponíveis para interação de todas as funções desenvolvidas para o sistema proposto.

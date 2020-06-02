@@ -15,7 +15,7 @@ typedef struct aluno {
 
 Aluno List[N];
 int Cont = 0; //Contador Global
-int flagSalvar = 0;  //0 Salvo - 1 Não Salvo.
+int FlagSalvar = 0;  //0 Salvo - 1 Não Salvo.
 
 void addAluno();
 void buscaAluno();
@@ -54,10 +54,19 @@ int main(){
                 salvaList();
                 break;
             case 7:
-                abreList();
+                if(FlagSalvar == 1){
+                    puts("Modificações feitas serão perdidas");
+                    puts("Deseja salvar? (S/N)");
+                    if(validaEscolha() == 0)
+                        salvaList();
+                    else
+                        abreList();
+                }
+                else
+                    abreList();
                 break;
             case 0:
-                if(flagSalvar == 1){
+                if(FlagSalvar == 1){
                     puts("Modificações feitas serão perdidas");
                     puts("Deseja salvar? (S/N)");
                     if(validaEscolha() == 0)
@@ -95,7 +104,7 @@ void addAluno(){
     }
     Cont++;
     puts("Aluno Cadastrado.");
-    flagSalvar = 1;
+    FlagSalvar = 1;
 }
 
 //Proceidmento para buscar um valor de matricula entre os alunos cadastrados no vetor List.
@@ -219,7 +228,7 @@ void salvaList(){
     fclose(fp);
 
     puts("Arquivo salvo.");
-    flagSalvar = 0;
+    FlagSalvar = 0;
 }
 
 //Procidmento para buscar um determinado arquivo escolhido pelo usuário.
@@ -227,6 +236,7 @@ void salvaList(){
 void abreList(){
     FILE *fp;
     char arquivo[50];
+    Cont = 0;
 
     setbuf(stdin,NULL);
     printf("Nome do arquivo: ");
