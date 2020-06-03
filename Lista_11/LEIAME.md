@@ -200,7 +200,7 @@ A algoritmo realiza duas leituras, de forma que ele sempre tenha duas coordenada
 
 Por fim, o cálculo das distâncias é realizado pela função _calcDistancia()_ e tem a mais simples das implementações. Trata-se de uma distância euclidiana calculada da seguinte maneira:
 
-$sqrt{(x_{2} - x_{1})^2+(y_{2} - y_{1})^2+(z_{2} - z_{1})^2}$
+![formula]<img src="https://render.githubusercontent.com/render/math?math=sqrt{(x_{2} - x_{1})^2+(y_{2} - y_{1})^2+(z_{2} - z_{1})^2}">
 
 A função recebe duas variáveis do tipo _Coordenda_ e aplica a fórmula nos dados contidos nas variáveis e em seguida retorna o resultado da operação para a função chamadora:
 
